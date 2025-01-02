@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Prorrateo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <label>PRORRATEO DE PLAN POSPAGO</label>
+        <label for="costoAnterior">Costo del plan anterior:</label>
+        <input type="number" id="costoAnterior" placeholder="Ingrese el costo">
+        <br>
+        <label for="costoNuevo">Costo del plan nuevo:</label>
+        <input type="number" id="costoNuevo" placeholder="Ingrese el costo">
+        <br>
+        <label for="cicloFacturacion">Ciclo de facturación (días):</label>
+        <input type="number" id="cicloFacturacion" value="30">
+        <br>
+        <label for="fechaCambio">Fecha del cambio de plan:</label>
+        <input type="date" id="fechaCambio" min="">
+        <br>
+        <button onclick="calcularProrrateo()">Calcular</button>
+        <p id="resultado"></p>
+        </div>
+    
+
+    <script>
+        function calcularProrrateo() {
+            const costoAnterior = parseFloat(document.getElementById('costoAnterior').value);
+            const costoNuevo = parseFloat(document.getElementById('costoNuevo').value);
+            const cicloFacturacion = parseInt(document.getElementById('cicloFacturacion').value);
+            const fechaCambio = new Date(document.getElementById('fechaCambio').value);
+
+            // Obtener el primer día del mes del cambio
+            const primerDiaMes = new Date(fechaCambio.getFullYear(), fechaCambio.getMonth(), 1);
+
+            // Calcular los días del mes hasta la fecha del cambio
+            const diasHastaCambio = Math.floor((fechaCambio - primerDiaMes) / (1000 * 60 * 60 * 24)) + 1;
+
+            // Calcular los días restantes del mes
+            const diasRestantes = cicloFacturacion - diasHastaCambio;
+
+            // Calcular el costo diario de cada plan
+            const costoDiarioAnterior = costoAnterior / cicloFacturacion;
+            const costoDiarioNuevo = costoNuevo / cicloFacturacion;
+
+            // Calcular el prorrateo
+            const prorrateoAnterior = costoDiarioAnterior * diasHastaCambio;
+            const prorrateoNuevo = costoDiarioNuevo * diasRestantes;
+
+            // Mostrar el resultado
+            document.getElementById('resultado').textContent = `Prorrateo del plan anterior: $${prorrateoAnterior.toFixed(2)}
+                                                                Prorrateo del plan nuevo: $${prorrateoNuevo.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
